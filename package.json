@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"No tests yet...\""
+    "test": "echo \"No tests yet...\"",
+    "start": "node index.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
@@ -14,6 +15,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.4",
     "mongoose": "^5.6.10",
+    "nodemon": "^1.19.4",
     "pg": "^7.12.1",
     "sendgrid": "^5.2.3"
   },

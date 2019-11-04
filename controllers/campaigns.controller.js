@@ -23,7 +23,7 @@ exports.newCampaign = async function (req, res) {
             recipient_email_hashed: hash, 
             recipient_email:  req.body.recipient_email,
             form_type: req.body.form_type,
-            fields:  req.body.fields[0]
+            fields:  req.body.fields[0] // TODO: fix this so it stores fields unique to forms, need to create a config file to make data structre for build it forms ? 
         })
     } catch (err) {
         console.error(err.message);

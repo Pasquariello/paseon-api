@@ -24,23 +24,14 @@ exports.newCampaign = async function (req, res) {
             recipient_email:  req.body.recipient_email,
             form_type: req.body.form_type,
             fields:  req.body.fields[0] // TODO: fix this so it stores fields unique to forms, need to create a config file to make data structre for build it forms ? 
-        }).then( function (result) {
-            res = {
-                status : 200,
-                body   : JSON.stringify(reuslt || {}),
-                headers: {
-                    'Access-Control-Allow-Origin'     : '*',
-                    'Access-Control-Allow-Credentials': true,
-                    'Content-Type'                    : 'application/json',
-                },
-            };  // respond back to request
-            return res;
-         });
-         console.log('res', res)
+        }).returning('*')
+        .then((item) => {
+            res.json(item);     // respond back to request
+
+        });      
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
 
     }
-    
 };

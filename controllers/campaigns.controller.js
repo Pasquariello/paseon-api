@@ -24,27 +24,27 @@ exports.campaignDetails = async function (req, res){
     console.log('hit details!')
     console.log(req.params)
     try {
+        await db('campaigns').select('fields').where({
+            id: req.params.id
+        }).then(data_schema => {
+            db('campaign_forms').where({            
+                   campaign_id: req.params.id
+                }).then(form_data => {
+                    res.json({
+                        data_schema,
+                        form_data
+                    });
+                })
+        })
+
         // await db('campaign_forms').where({            
         //    campaign_id: req.params.id
         // }).then(response => {
         //     console.log('resp', response)
         //     res.json(response);
         // })
-        await db('campaigns').select('id', 'fields').where({
-            id: req.params.id
-        }).then(response => {
-            db('campaign_forms').where({            
-                   campaign_id: response.id
-                }).then(response2 => {
-                    console.log('resp', response)
-                    res.json({
-                        schema: response,
-                        fields: response2
-                    });
-                })
-        })
 
-        // await db('campaigns').select('fields').join ('campaign_forms', 'campaigns.id', '=', 'campaign_id').where({            
+        // await db('campaigns').select('fields').join('campaign_forms', 'campaigns.id', '=', 'campaign_id').select('*').where({            
         //     campaign_id: req.params.id
         //  }).then(response => {
         //     console.log('resp', response)

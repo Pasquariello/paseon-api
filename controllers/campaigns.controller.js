@@ -2,6 +2,7 @@
 const db = require('../lib/Postgres').db();
 const config = require('config');
 const crypto = require('crypto')
+const { QueryBuilder } = require('objection');
 
 
 
@@ -38,33 +39,45 @@ exports.campaignDetails = async function (req, res){
         //         })
         // })
 
+
+
+// await db('campaign_responses').distinct(db.raw('ON (submission_id) submission_id, field'))
+//   .orderBy('submission_id').then(d => {
+//       console.log('SYLS', d)
+//   })
+
+// await db
+//     .select([
+//         // Select all fields from table a
+//         'campaign_responses.*',
+//         // Select only id field from table b
+//         'campaign_forms.id as b_id'
+//     ])
+//     .from('table_a')
+//     .leftJoin(
+//         'campaign_responses.*',
+//         'campaign_forms',
+//         'campaign_forms.id'
+//     ).then(t => {
+//         console.log('==========', t)
+//     });
         await db('campaigns').select('fields').where({
             id: req.params.id
         }).then(data_schema => {
-            db('campaign_responses').where({            
+            db('campaign_responses').select('field_values').where({            
                    campaign_id: req.params.id
                 }).then(form_data => {
-                    console.log('TAYLOR', form_data)
+                   console.log('TAYLOR', form_data)
+                  db('campaign_responses').distinct('submission_id').then( data =>{
                     res.json({
                         data_schema,
-                        form_data
+                        form_data,
+                        data
                     });
+                  })
+               
                 })
         })
-
-        // await db('campaign_forms').where({            
-        //    campaign_id: req.params.id
-        // }).then(response => {
-        //     console.log('resp', response)
-        //     res.json(response);
-        // })
-
-        // await db('campaigns').select('fields').join('campaign_forms', 'campaigns.id', '=', 'campaign_id').select('*').where({            
-        //     campaign_id: req.params.id
-        //  }).then(response => {
-        //     console.log('resp', response)
-        //     res.json(response);
-        // })
 
 
 

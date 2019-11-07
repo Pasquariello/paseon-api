@@ -22,7 +22,7 @@ exports.campaignDetails = async function (req, res){
 
     try {
     // CURRENT WORKING VERSION
-        await db('campaigns').select('schema').where({
+        await db('campaigns').select('schema', 'campaign_name', 'date_created').where({
             id: req.params.id
         }).then(data_schema => {
             db('campaign_responses').select('*').where({            

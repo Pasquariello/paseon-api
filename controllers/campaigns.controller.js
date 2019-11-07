@@ -8,7 +8,7 @@ const crypto = require('crypto')
 exports.getCampaigns = async function (req, res){
     console.log('hit get!')
     try {
-        await db('campaigns').select('id', 'campaign_name', 'fields').where({            
+        await db('campaigns').select('id', 'campaign_name', 'date_created').where({            
            user_id: 2  //todo this will need to be based on logged in user
         }).then(response => {
             res.json(response);

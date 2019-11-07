@@ -93,6 +93,3 @@ exports.newCampaign = async function (req, res) {
 
     }
 };
-
-
-{"{\"type\":\"email\",\"tag\":\"input\",\"label\":\"Recipient Email\",\"name\":\"recipient_email\"}","{\"type\":\"text\",\"tag\":\"input\",\"label\":\"Name\",\"name\":\"name\"}","{\"type\":\"text\",\"tag\":\"input\",\"label\":\"Subject\",\"name\":\"subject\"}","{\"type\":\"\",\"tag\":\"textarea\",\"label\":\"Body\",\"name\":\"body\"}"}

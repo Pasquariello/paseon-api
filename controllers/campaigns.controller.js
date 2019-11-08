@@ -85,3 +85,17 @@ console.log(req.body.fields)
 
     }
 };
+
+exports.removeCampaign = async function (req, res) {
+    try {
+        let id = req.params.id
+        await db('campaigns')
+            .where('id', id)
+            .del().then(()=>{
+                res.sendStatus(200)
+            })
+
+    }catch(err){
+        console.log('error deleting')
+    }
+};

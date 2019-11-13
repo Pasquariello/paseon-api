@@ -19,6 +19,7 @@ exports.getCampaigns = async function (req, res){
 }
 
 exports.campaignDetails = async function (req, res){
+    console.log('in dets')
 
     try {
     // CURRENT WORKING VERSION
@@ -60,27 +61,45 @@ console.log(req.body.fields)
             })
             .returning('id')
             .then( response => {
-                const fieldsToInsert = req.body.fields.map(field => 
-                    ({  
-                        campaign_id: response[0],
-                        tag: field.tag, 
-                        type: field.type,
-                        label: field.label,
-                        name: field.name,
-                        value: field.value,
-                        options: field.options,
-                        campaign_name: req.body.campaign_name,
-                        user_id: 2,
-                    })); 
+                res.sendStatus(200)
+            //     const fieldsToInsert = req.body.fields.map(field => 
+            //         ({  
+            //             campaign_id: response[0],
+            //             tag: field.tag, 
+            //             type: field.type,
+            //             label: field.label,
+            //             name: field.name,
+            //             value: field.value,
+            //             options: field.options,
+            //             campaign_name: req.body.campaign_name,
+            //             user_id: 2,
+            //         })); 
         
-              return db('campaign_forms').insert(fieldsToInsert)
-                  .then(() => {res.sendStatus(200)})
-                  .catch((err) => {console.log('Error', err)});
+            //   return db('campaign_forms').insert(fieldsToInsert)
+                //   .then(() => {res.sendStatus(200)})
+                //   .catch((err) => {console.log('Error', err)});
             });
     
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
 
+    }
+};
+
+exports.removeCampaign = async function (req, res) {
+    console.log('in delete')
+    console.log('TAYLOR:',req.body.idList)
+    try {
+        let idList = req.body.idList
+        await db('campaigns')
+            .whereIn('id', idList)
+            .del().then((r)=>{
+                console.log(r)
+                res.sendStatus(200)
+            })
+
+    }catch(err){
+        console.log('error deleting', err)
     }
 };

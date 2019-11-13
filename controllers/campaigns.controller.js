@@ -28,7 +28,6 @@ exports.campaignDetails = async function (req, res){
             db('campaign_responses').select('*').where({            
                    campaign_id: req.params.id
                 }).then(form_data => {
-                //    console.log('TAYLOR', form_data)
                     res.json({
                         data_schema,
                         form_data,

@@ -29,12 +29,6 @@ exports.campaignDetails = async function (req, res){
             db('campaign_responses').select('*').where({            
                    campaign_id: req.params.id
                 }).then(form_data => {
-<<<<<<< HEAD
-                   console.log('TAYLOR form_data', form_data)
-                   console.log('TAYLOR data_schema', data_schema)
-
-=======
->>>>>>> 0a0a508b4588513e9e85523f6163120c50e6e77c
                     res.json({
                         data_schema,
                         form_data,
@@ -80,17 +74,24 @@ console.log(req.body.fields)
         //     }
         //  ]
 
-
+        
+        let resp_schema = {}
          let response_schema = req.body.fields.map(field => {
              let key = field.name;
              let label_string = field.label; 
+             resp_schema[key] = {
+                label: label_string,
+                value: ""
+             }
              return {
                  [key] : {
                     label: label_string,
                     value: ""
                  }
+                
              }
          })
+         console.log('=====', resp_schema)
 
          console.log('TAY TAY TAY TAY', JSON.stringify(response_schema))
    
@@ -98,7 +99,7 @@ console.log(req.body.fields)
                 campaign_name: req.body.campaign_name, 
                 user_id: 2,  //todo this will need to be based on logged in user
                 form_schema: JSON.stringify(req.body.fields),
-                response_schema: JSON.stringify(response_schema)
+                response_schema: JSON.stringify(resp_schema)
             })
             .returning('id')
             .then( response => {

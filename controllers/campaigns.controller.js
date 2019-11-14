@@ -23,13 +23,15 @@ exports.campaignDetails = async function (req, res){
 
     try {
     // CURRENT WORKING VERSION
-        await db('campaigns').select('schema', 'campaign_name', 'date_created').where({
+        await db('campaigns').select('form_schema', 'response_schema', 'campaign_name', 'date_created').where({
             id: req.params.id
         }).then(data_schema => {
             db('campaign_responses').select('*').where({            
                    campaign_id: req.params.id
                 }).then(form_data => {
-                //    console.log('TAYLOR', form_data)
+                   console.log('TAYLOR form_data', form_data)
+                   console.log('TAYLOR data_schema', data_schema)
+
                     res.json({
                         data_schema,
                         form_data,
@@ -53,15 +55,51 @@ console.log(req.body.fields)
         if (req.body.recipient_email){
             hash = hash.update('taylor@pasq.net').digest("hex");
         }
+
+        // [ 
+        //     { 
+        //        "tag":"input",
+        //        "name":"name",
+        //        "type":"text",
+        //        "label":"Name",
+        //        "value":"",
+        //        "required":false,
+        //        "placholder":""
+        //     },
+        //     { 
+        //        "tag":"input",
+        //        "name":"fav_hobbie",
+        //        "type":"text",
+        //        "label":"Fav Hobbie",
+        //        "value":"",
+        //        "required":false,
+        //        "placholder":""
+        //     }
+        //  ]
+
+
+         let response_schema = req.body.fields.map(field => {
+             let key = field.name;
+             let label_string = field.label; 
+             return {
+                 [key] : {
+                    label: label_string,
+                    value: ""
+                 }
+             }
+         })
+
+         console.log('TAY TAY TAY TAY', JSON.stringify(response_schema))
    
             await db('campaigns').insert({
                 campaign_name: req.body.campaign_name, 
                 user_id: 2,  //todo this will need to be based on logged in user
-                schema: JSON.stringify(req.body.fields),
-
+                form_schema: JSON.stringify(req.body.fields),
+                response_schema: JSON.stringify(response_schema)
             })
             .returning('id')
             .then( response => {
+                console.log('response', response)
                 res.sendStatus(200)
             //     const fieldsToInsert = req.body.fields.map(field => 
             //         ({  

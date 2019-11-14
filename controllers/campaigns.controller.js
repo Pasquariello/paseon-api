@@ -75,53 +75,30 @@ console.log(req.body.fields)
         //  ]
 
         
-        let resp_schema = {}
-         let response_schema = req.body.fields.map(field => {
+        let response_schema = {}
+        req.body.fields.map(field => {
+
              let key = field.name;
              let label_string = field.label; 
-             resp_schema[key] = {
+             
+             response_schema[key] = {
                 label: label_string,
                 value: ""
              }
-             return {
-                 [key] : {
-                    label: label_string,
-                    value: ""
-                 }
-                
-             }
-         })
-         console.log('=====', resp_schema)
+         });
 
-         console.log('TAY TAY TAY TAY', JSON.stringify(response_schema))
    
-            await db('campaigns').insert({
-                campaign_name: req.body.campaign_name, 
-                user_id: 2,  //todo this will need to be based on logged in user
-                form_schema: JSON.stringify(req.body.fields),
-                response_schema: JSON.stringify(resp_schema)
-            })
-            .returning('id')
-            .then( response => {
-                console.log('response', response)
-                res.sendStatus(200)
-            //     const fieldsToInsert = req.body.fields.map(field => 
-            //         ({  
-            //             campaign_id: response[0],
-            //             tag: field.tag, 
-            //             type: field.type,
-            //             label: field.label,
-            //             name: field.name,
-            //             value: field.value,
-            //             options: field.options,
-            //             campaign_name: req.body.campaign_name,
-            //             user_id: 2,
-            //         })); 
-        
-            //   return db('campaign_forms').insert(fieldsToInsert)
-                //   .then(() => {res.sendStatus(200)})
-                //   .catch((err) => {console.log('Error', err)});
-            });
+        await db('campaigns').insert({
+            campaign_name: req.body.campaign_name, 
+            user_id: 2,  //todo this will need to be based on logged in user
+            form_schema: JSON.stringify(req.body.fields),
+            response_schema: JSON.stringify(response_schema)
+        })
+        .returning('id')
+        .then( response => {
+            console.log('response', response)
+            res.sendStatus(200)
+        });
     
     } catch (err) {
         console.error(err.message);

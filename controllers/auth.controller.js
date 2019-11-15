@@ -38,9 +38,13 @@ exports.userAuth = async function (req, res) {
 
       const payload = {
         user: {
-          id: user.id
+          id: user[0].id
         }
       };
+
+      console.log('=========', user)
+
+      console.log('=========', payload)
 
       jwt.sign(
         payload,
@@ -48,7 +52,7 @@ exports.userAuth = async function (req, res) {
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({ token, payload });
         }
       );
     } catch (err) {

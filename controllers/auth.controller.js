@@ -15,7 +15,7 @@ exports.userAuth = async function (req, res) {
 
     const { username } = req.body;
     try {
-        let user = await db('users').select('id', 'email').where({email: username});
+        let user = await db('users').select('*').where({email: username});
 
       if (!user) {
         return res
@@ -42,6 +42,7 @@ exports.userAuth = async function (req, res) {
         }
       };
 
+      let userData = user[0] 
       console.log('=========', user)
 
       console.log('=========', payload)
@@ -52,13 +53,30 @@ exports.userAuth = async function (req, res) {
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, payload });
+          res.json({ token, userData });
         }
-      );
+      )
+      
+      
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
 };
+
+
+exports.getUserInfo = async function (req, res) {
+  const { id } = req.body;
+
+  try {
+    await db('users').select('*').where({            
+      id: id  //todo this will need to be based on logged in user
+    }).then(response => {
+        res.json(response);
+    })
+  } catch (err) {
+    console.log('get error', err)
+  }
+}
 
 ////

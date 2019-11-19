@@ -7,9 +7,12 @@ const crypto = require('crypto')
 
 exports.getCampaigns = async function (req, res){
     console.log('hit get!')
+    console.log('in dets', req.params.id)
+
+
     try {
         await db('campaigns').select('id', 'campaign_name', 'date_created').where({            
-           user_id: 2  //todo this will need to be based on logged in user
+           user_id: req.params.id  //todo this will need to be based on logged in user
         }).then(response => {
             res.json(response);
         })
@@ -19,8 +22,8 @@ exports.getCampaigns = async function (req, res){
 }
 
 exports.campaignDetails = async function (req, res){
-    console.log('in dets')
-
+    console.log('in dets', req.params.id)
+    
     try {
     // CURRENT WORKING VERSION
         await db('campaigns').select('form_schema', 'response_schema', 'campaign_name', 'date_created').where({

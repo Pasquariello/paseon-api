@@ -1,44 +1,163 @@
 const db = require('../lib/Postgres').db();
 const config = require('config');
-const crypto = require('crypto')
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+
 
 
 
 exports.register_user = async function (req, res){
     console.log('hit register controllor!')
 
-    let user = {
-        fist_name: req.body.fist_name,
-        last_name: req.body.last_name,
+    let user_obj = {
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
         email: req.body.email,
         company: req.body.company
     }
 
-    try {
-        console.log('try', req)
-        await await db('users').select('email').where({
-            email: user.email
-        }).then(response => {
-            console.log('response', response);
-            if (!response.length) {
-                db('users').insert({
-                        first_name: user.fist_name, last_name: user.last_name, email: user.email, company: user.company
-                }).where({            
-                       user_id: req.params.id  //todo this will need to be based on logged in user
-                    }).then(response => {
-                        console.log('response', response)
-                        res.json(response);
-                    })
-            }
+try {
+        let user = await db('users').select('email').where({email: user_obj.email});
+
+        if (!user.length) {
+
+        let my_user = await db('users').insert({
+            first_name: user_obj.first_name, 
+            last_name: user_obj.last_name,
+            email: user_obj.email, 
+            company: user_obj.company
+        }).returning('*').then(resp => {
+            console.log('resp=========================', resp)
+
+        const payload = resp[0];
+        console.log('payload', payload);
+        jwt.sign(
+          payload,
+          config.get('jwtSecret'),
+          { expiresIn: 360000 },
+          (err, token) => {
+            if (err) throw err;
+            res.json({ token, payload });
+          }
+        )
+
+            
         });
-        // await db('users').insert(
-        //     'id', 'campaign_name', 'date_created'
-        // ).where({            
-        //    user_id: req.params.id  //todo this will need to be based on logged in user
-        // }).then(response => {
-        //     res.json(response);
-        // })
+        console.log('my_user=========================', my_user)
+
+        }
+        // if (!user) {
+        //   return res
+        //     .status(400)
+        //     .json({ errors: [{ msg: 'Invalid Credentials' }] });
+        // }
+        //   if (user.length == 0){
+        //       return res
+        //             .status(400)
+        //             .json({ errors: [{ msg: 'Invalid Credentials' }] });
+        //   } //TODO: IF user update count
+  
+
+
+
+        // const payload = {
+        //   user: {
+        //     id: user[0].id
+        //   }
+        // };
+  
+        // let userData = user[0] 
+        // console.log('=========', user)
+  
+        // console.log('=========', payload)
+  
+        // jwt.sign(
+        //   payload,
+        //   config.get('jwtSecret'),
+        //   { expiresIn: 360000 },
+        //   (err, token) => {
+        //     if (err) throw err;
+        //     res.json({ token, userData });
+        //   }
+        // )
+        
+
+
+
+
+
+
+        // await db('users').select('email').where({
+        //     email: user_obj.email
+        // }).then(resp=>{
+
+        //     if (!resp.length){
+        //     console.log('not existing')
+        //          let my_user = db('users').insert({
+        //                 first_name: user_obj.first_name, last_name: user_obj.last_name, email: user_obj.email, company: user_obj.company
+        //         }).returning('*') .then( response => {
+        //             console.log('response', response.json)
+        //             const payload = {
+        //                 my_user: {
+        //                   id: response[0].id
+        //                 }
+        //               };
+        //               console.log('my_user', my_user)
+        //             res.sendStatus(200)
+        //                     jwt.sign(
+        //                     payload,
+        //                     config.get('jwtSecret'),
+        //                     { expiresIn: 360000 },
+        //                     (err, token) => {
+        //                       if (err) throw err;
+        //                       res.json({ token, my_user });
+        //                     }
+        //                   )
+        //         });
+        //     }  
+
+                    // if (!user) {
+                    //     return res
+                    //       .status(400)
+                    //       .json({ errors: [{ msg: 'Invalid Credentials' }] });
+                    //   }
+                    //     if (user.length == 0){
+                    //         return res
+                    //               .status(400)
+                    //               .json({ errors: [{ msg: 'Invalid Credentials' }] });
+                    //     } //TODO: IF user update count
+                
+                    //     console.log('=========', )
+
+                    //     const payload = {
+                    //         user: {
+                    //           id: user.id
+                    //         }
+                    //       };
+                    //       console.log('use =============== r', user)
+                    //       console.log('payload', payload);
+
+
+                    //     jwt.sign(
+                    //         payload,
+                    //         config.get('jwtSecret'),
+                    //         { expiresIn: 360000 },
+                    //         (err, token) => {
+                    //           if (err) throw err;
+                    //           res.json({ token, user });
+                    //         }
+                    //       )
+                  // })
+                     //}
+                        
+      
+    
+ 
+        
     } catch (err) {
         console.log('get error', err)
     }
 }
+
+//TODO on registration create and set JWT token
+// send response if email already exists

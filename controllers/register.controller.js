@@ -20,6 +20,16 @@ exports.register_user = async function (req, res){
             email: user.email
         }).then(response => {
             console.log('response', response);
+            if (!response.length) {
+                db('users').insert({
+                        first_name: user.fist_name, last_name: user.last_name, email: user.email, company: user.company
+                }).where({            
+                       user_id: req.params.id  //todo this will need to be based on logged in user
+                    }).then(response => {
+                        console.log('response', response)
+                        res.json(response);
+                    })
+            }
         });
         // await db('users').insert(
         //     'id', 'campaign_name', 'date_created'

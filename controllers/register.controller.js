@@ -4,7 +4,7 @@ const crypto = require('crypto')
 
 
 
-exports.register_controller = async function (req, res){
+exports.register_user = async function (req, res){
     console.log('hit register controllor!')
 
     try {

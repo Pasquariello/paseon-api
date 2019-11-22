@@ -23,6 +23,7 @@ app.use(cors({credentials: true, origin: '*'}));
 const sendEmail = require('./routes/api/sendEmail.route.js'); // Imports routes for the sendEmail
 const auth = require('./routes/api/auth.route.js'); // Imports routes for the auth
 const campaigns = require('./routes/api/campaigns.route.js'); // Imports routes for the campaigns
+const register = require('./routes/api/register.route.js'); // Imports routes for the register
 
 
 
@@ -34,6 +35,7 @@ app.get('/', (req, res) => res.send('Entry Point'))
 //Use Routes
 app.use('/emailService', sendEmail);
 app.use('/login', auth);
+app.use('/register', register);
 app.use('/campaign', campaigns);
 
 

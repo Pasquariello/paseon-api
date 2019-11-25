@@ -24,7 +24,8 @@ const sendEmail = require('./routes/api/sendEmail.route.js'); // Imports routes 
 const auth = require('./routes/api/auth.route.js'); // Imports routes for the auth
 const campaigns = require('./routes/api/campaigns.route.js'); // Imports routes for the campaigns
 const register = require('./routes/api/register.route.js'); // Imports routes for the register
-
+// Stripe
+const payment = require('./routes/api/payment.route.js'); // Imports routes for the stripe
 
 
 //dont need any more but hold for now
@@ -37,6 +38,8 @@ app.use('/emailService', sendEmail);
 app.use('/login', auth);
 app.use('/register', register);
 app.use('/campaign', campaigns);
+app.use('/payment', payment);
+
 
 
 const port = process.env.PORT || 3001;

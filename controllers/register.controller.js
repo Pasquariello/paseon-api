@@ -13,7 +13,8 @@ exports.register_user = async function (req, res){
         first_name: req.body.firstname,
         last_name: req.body.lastname,
         email: req.body.email,
-        company: req.body.company
+        company: req.body.company, 
+        account_type: 'basic'
     }
 
 try {
@@ -25,7 +26,8 @@ try {
             first_name: user_obj.first_name, 
             last_name: user_obj.last_name,
             email: user_obj.email, 
-            company: user_obj.company
+            company: user_obj.company,
+            account_type: user_obj.account_type
         }).returning('*').then(resp => {
             console.log('resp=========================', resp)
 

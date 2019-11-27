@@ -11,11 +11,26 @@ exports.getCampaigns = async function (req, res){
 
 
     try {
-        await db('campaigns').select('id', 'campaign_name', 'date_created', 'count').where({            
-           user_id: req.params.id  //todo this will need to be based on logged in user
-        }).then(response => {
-            res.json(response);
-        })
+        // await db('campaigns').select('id', 'campaign_name', 'date_created', 'count').where({            
+        //    user_id: req.params.id  //todo this will need to be based on logged in user
+        // }).then(response => {
+        //     res.json(response);
+        // })
+
+
+        // MOVE THIS TO A NEW ANALYTICS GET?
+        await db('campaigns')
+            .leftJoin('campaign_responses', 'campaigns.id', '=','campaign_responses.campaign_id')
+            .select('campaigns.id', 'campaigns.form_schema', 'campaigns.response_schema', 'campaigns.campaign_name', 'campaigns.date_created', 'campaigns.count', 'campaign_responses.field_values')
+            .where({            
+                user_id: req.params.id  //todo this will need to be based on logged in user
+             })
+            .then(response => {
+                console.log('response', response)
+                
+                res.json(response);
+            })
+
 
     
     } catch (err) {
@@ -41,8 +56,6 @@ exports.campaignDetails = async function (req, res){
                
                 });
         });
-
-
 
     } catch (err) {
         console.log('get error', err)

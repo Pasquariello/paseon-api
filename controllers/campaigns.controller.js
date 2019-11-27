@@ -11,11 +11,13 @@ exports.getCampaigns = async function (req, res){
 
 
     try {
-        await db('campaigns').select('id', 'campaign_name', 'date_created').where({            
+        await db('campaigns').select('id', 'campaign_name', 'date_created', 'count').where({            
            user_id: req.params.id  //todo this will need to be based on logged in user
         }).then(response => {
             res.json(response);
         })
+
+    
     } catch (err) {
         console.log('get error', err)
     }

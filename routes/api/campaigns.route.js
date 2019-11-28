@@ -7,6 +7,7 @@ const campaigns_controller = require('../../controllers/campaigns.controller.js'
 
 router.post('/new_campaign', campaigns_controller.newCampaign);
 router.get('/get_campaigns/:id', campaigns_controller.getCampaigns);
+router.get('/analytics/:id', campaigns_controller.getStatsAllCampaigns);
 router.get('/get_campaign_details/:id', campaigns_controller.campaignDetails);
 router.delete('/remove_campaign/', campaigns_controller.removeCampaign);
 

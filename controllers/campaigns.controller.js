@@ -19,9 +19,13 @@ exports.getCampaigns = async function (req, res){
 
 
         // MOVE THIS TO A NEW ANALYTICS GET?
+
+        // LENGTH WORKS!!!!
         await db('campaigns')
             .leftJoin('campaign_responses', 'campaigns.id', '=','campaign_responses.campaign_id')
-            .select('campaigns.id', 'campaigns.form_schema', 'campaigns.response_schema', 'campaigns.campaign_name', 'campaigns.date_created', 'campaigns.count', 'campaign_responses.field_values')
+            .select('campaigns.id', 'campaigns.form_schema', 'campaigns.response_schema', 'campaigns.campaign_name', 'campaigns.date_created', 'campaigns.count')
+            .select(db.raw('jsonb_array_length(field_values)'))
+        
             .where({            
                 user_id: req.params.id  //todo this will need to be based on logged in user
              })
@@ -29,8 +33,15 @@ exports.getCampaigns = async function (req, res){
                 console.log('response', response)
                 
                 res.json(response);
-            })
+            });
 
+            // !!!!!!! LENGTH EXAMPLE !!!!!!!
+            // await db.raw('SELECT jsonb_array_length(field_values) FROM campaign_responses;')
+            //     .then(response => {
+            //         console.log('response', response)
+                    
+            //         res.json(response);
+            //     });
 
     
     } catch (err) {

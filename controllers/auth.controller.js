@@ -71,4 +71,8 @@ exports.getUserInfo = async function (req, res) {
   }
 }
 
+exports.sendResetLink = async function (req, res) {
+  console.log('hit sendResetLink CONTROLLER FUNCTION')
+}
+
 ////

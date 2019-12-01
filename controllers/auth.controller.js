@@ -5,6 +5,8 @@ const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
+const EmailUtil = require('../lib/Utils.js');
+const sgMail = require('@sendgrid/mail');
 
 
 // let email =  "taylor@pasq.net";
@@ -73,6 +75,63 @@ exports.getUserInfo = async function (req, res) {
 
 exports.sendResetLink = async function (req, res) {
   console.log('hit sendResetLink CONTROLLER FUNCTION')
+
+  let data = req.body;
+  let clean_recipient_email = data.username.trim(); 
+  console.log('clean_recipient_email', clean_recipient_email)
+  try {
+      let emailAcctData = await EmailUtil.getEmail(clean_recipient_email);
+
+      if (emailAcctData){
+         
+          let data = JSON.parse(emailAcctData.body)
+          
+          console.log('data', data)
+          // MOVE INTO UTIL FUNCTION TODO:
+          //EmailUtil.updateEmailCount(data);
+
+
+
+      } else {
+
+          EmailUtil.addEmail(clean_recipient_email);
+
+
+      }
+      sendEmail(data);
+  }
+  catch (ex) {
+      console.log('error in mail trigger', ex)
+
+  }
+
+
+
+
+  function sendEmail(data) {
+    console.log('data data data', data)
+      //const data = data.body
+
+      // let recipient_email_multi = data.recipient_email.split(",");
+      // recipient_email_multi.join(',')
+
+      // using Twilio SendGrid's v3 Node.js Library
+      // https://github.com/sendgrid/sendgrid-nodejs
+      sgMail.setApiKey('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');
+      const msg = {
+      to: data.username, // TODO does this need to be changed to the fetched data?
+      from: data.from,
+      subject: data.subject,
+      text: 'PASSWORD REST LINK: www.google.com',
+      html: '<p>'+data.body+'</p>'
+      };
+      sgMail.send(msg);
+      return res.sendStatus(200);
+  }
+
+
+
+
 }
 
 ////

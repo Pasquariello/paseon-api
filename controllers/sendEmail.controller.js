@@ -80,7 +80,7 @@ exports.sendEmail = async function (req, res) {
 
         // using Twilio SendGrid's v3 Node.js Library
         // https://github.com/sendgrid/sendgrid-nodejs
-        sgMail.setApiKey('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');
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
         to: data.recipient_email,
         from: data.from,

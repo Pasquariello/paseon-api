@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 var cors = require('cors');
-
+require('dotenv').config()
 
 const app = express();
 //Body Parser middleware
@@ -41,6 +41,8 @@ app.use('/campaign', campaigns);
 app.use('/payment', payment);
 
 
+
+console.log(process.env.SENDGRID_API_KEY)
 
 const port = process.env.PORT || 3001;
 

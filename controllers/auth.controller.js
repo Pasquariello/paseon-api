@@ -25,11 +25,11 @@ exports.userAuth = async function (req, res) {
           .status(400)
           .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
-        if (user.length == 0){
-            return res
-                  .status(400)
-                  .json({ errors: [{ msg: 'Invalid Credentials' }] });
-        } //TODO: IF user update count
+      if (user.length == 0){
+          return res
+                .status(400)
+                .json({ errors: [{ msg: 'Invalid Credentials' }] });
+      } //TODO: IF user update count
 
       const payload = {
         user: {
@@ -38,9 +38,6 @@ exports.userAuth = async function (req, res) {
       };
 
       let userData = user[0] 
-      console.log('=========', user)
-
-      console.log('=========', payload)
 
       jwt.sign(
         payload,
@@ -89,7 +86,6 @@ exports.sendResetLink = async function (req, res) {
           let data = JSON.parse(emailAcctData.body)
           let token = crypto.randomBytes(20).toString('hex'); // get user by token
 
-          console.log('data', data)
 
           sendEmail(data, token);
 
@@ -101,17 +97,13 @@ exports.sendResetLink = async function (req, res) {
                 reset_password_token: token, 
                 reset_password_expires: Date.now() + 36000 
             });
-            res.sendStatus(200)
+      } 
+      res.status(200).send({msg: 'Reset Link Sent' })
 
-      } else {
-
-          EmailUtil.addEmail(clean_recipient_email);
-
-
-      }
   }
   catch (ex) {
       console.log('error in mail trigger', ex)
+      res.status(500).send('Server error');
 
   }
 
@@ -140,7 +132,7 @@ exports.sendResetLink = async function (req, res) {
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const msg = {
   to: 'taylor@pasq.net',//data[0].email,
-  from: 'taylor.pasq@paseonforms.com',
+  from:'taylor@pasq.net', //'taylor.pasq@paseonforms.com',
   subject: 'Link to Reset Account Password',
   text: 
   `You are recieving this because you (or someone else) have requested the reset of the password for your account. \n\n`+

@@ -124,7 +124,7 @@ exports.sendResetLink = async function (req, res) {
 
       // using Twilio SendGrid's v3 Node.js Library
       // https://github.com/sendgrid/sendgrid-nodejs
-      sgMail.setApiKey('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');
+      sgMail.setApiKey(process.env.SENDGRID_API);
       const msg = {
       to: 'taylorpasq@gmail.com', // TODO does this need to be changed to the fetched data?
       from: 'taylorpasq@gmail.com',

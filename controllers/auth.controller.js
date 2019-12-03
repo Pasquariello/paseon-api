@@ -77,8 +77,8 @@ exports.getUserInfo = async function (req, res) {
 exports.sendResetLink = async function (req, res) {
   console.log('hit sendResetLink CONTROLLER FUNCTION')
 
-  let data = req.body;
-  let clean_recipient_email = data.username.trim(); 
+  // let data = req.body;
+  let clean_recipient_email = req.body.username.trim(); 
   console.log('clean_recipient_email', clean_recipient_email)
   
   try {
@@ -90,6 +90,9 @@ exports.sendResetLink = async function (req, res) {
           let token = crypto.randomBytes(20).toString('hex'); // get user by token
 
           console.log('data', data)
+
+          sendEmail(data, token);
+
           // MOVE INTO UTIL FUNCTION TODO:
           //EmailUtil.updateEmailCount(data);
           await db('users')
@@ -97,7 +100,8 @@ exports.sendResetLink = async function (req, res) {
             .update({
                 reset_password_token: token, 
                 reset_password_expires: Date.now() + 36000 
-            })
+            });
+            res.sendStatus(200)
 
       } else {
 
@@ -105,17 +109,17 @@ exports.sendResetLink = async function (req, res) {
 
 
       }
-      sendEmail(data);
   }
   catch (ex) {
       console.log('error in mail trigger', ex)
 
   }
 
+}
 
 
 
-  function sendEmail(data) {
+  function sendEmail(data, token) {
     console.log('data data data', data)
       //const data = data.body
 
@@ -124,21 +128,29 @@ exports.sendResetLink = async function (req, res) {
 
       // using Twilio SendGrid's v3 Node.js Library
       // https://github.com/sendgrid/sendgrid-nodejs
-      sgMail.setApiKey(process.env.SENDGRID_API);
-      const msg = {
-      to: 'taylorpasq@gmail.com', // TODO does this need to be changed to the fetched data?
-      from: 'taylorpasq@gmail.com',
-      subject: 'Hello Taylor',
-      text: 'PASSWORD REST LINK: www.google.com',
-      html: '<p>WHOA</p>'
-      };
-      sgMail.send(msg);
-      return res.sendStatus(200);
+      // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      // const msg = {
+      // to: 'taylor.pasq@paseonforms.com', // TODO does this need to be changed to the fetched data?
+      // from: 'taylorpasq@gmail.com',
+      // subject: 'Hello Taylor',
+      // text: 'PASSWORD REST LINK: www.google.com',
+      // html: '<p>WHOA</p>'
+      // };
+      // sgMail.send(msg);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const msg = {
+  to: data[0].email,
+  from: 'taylor.pasq@paseonforms.com',
+  subject: 'Reset Password',
+  text: 
+  `You are recieving this because you (or someone else) have requested the reset of the password for your account. \n\n`+
+  `Please click on the following link, or paste this into your browser to complete the process withing one hour of recieving it:\n\n`+
+  `http://localhost:3000/reset/${token}`+
+  `If you did not request this, please ignore this email and your password will remain unchaged.\n`,
+ // html: '<p> </p>',
+};
+  sgMail.send(msg);
   }
 
-
-
-
-}
 
 ////

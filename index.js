@@ -24,6 +24,8 @@ const sendEmail = require('./routes/api/sendEmail.route.js'); // Imports routes 
 const auth = require('./routes/api/auth.route.js'); // Imports routes for the auth
 const campaigns = require('./routes/api/campaigns.route.js'); // Imports routes for the campaigns
 const register = require('./routes/api/register.route.js'); // Imports routes for the register
+const account = require('./routes/api/account.route.js'); // Imports routes for the stripe
+
 // Stripe
 const payment = require('./routes/api/payment.route.js'); // Imports routes for the stripe
 
@@ -39,6 +41,8 @@ app.use('/login', auth);
 app.use('/register', register);
 app.use('/campaign', campaigns);
 app.use('/payment', payment);
+app.use('/account', account);
+
 
 
 

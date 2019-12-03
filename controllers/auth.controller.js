@@ -101,7 +101,6 @@ exports.sendResetLink = async function (req, res) {
                 reset_password_token: token, 
                 reset_password_expires: Date.now() + 36000 
             });
-            
             res.sendStatus(200)
 
       } else {
@@ -140,9 +139,9 @@ exports.sendResetLink = async function (req, res) {
       // sgMail.send(msg);
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const msg = {
-  to: data[0].email,
+  to: 'taylor@pasq.net',//data[0].email,
   from: 'taylor.pasq@paseonforms.com',
-  subject: 'Reset Password',
+  subject: 'Link to Reset Account Password',
   text: 
   `You are recieving this because you (or someone else) have requested the reset of the password for your account. \n\n`+
   `Please click on the following link, or paste this into your browser to complete the process withing one hour of recieving it:\n\n`+

@@ -8,7 +8,7 @@ const config = require('config');
 const EmailUtil = require('../lib/Utils.js');
 const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 
 
@@ -18,9 +18,10 @@ const crypto = require('crypto');
 exports.userAuth = async function (req, res) {
     // const errors = validationResult(req);
 
-    const { username } = req.body;
+    const { username, password } = req.body;
+
     try {
-        let user = await db('users').select('*').where({email: username});
+        let user = await db('users').select('*').first().where({email: username});
 
       if (!user) {
         return res
@@ -33,13 +34,19 @@ exports.userAuth = async function (req, res) {
                 .json({ errors: [{ msg: 'Invalid Credentials' }] });
       } //TODO: IF user update count
 
+      bcrypt.compare(password, user.password)
+      .then(isMatch => {
+          console.log('isMatch', isMatch)
+          if(isMatch){
+
+
       const payload = {
         user: {
-          id: user[0].id
+          id: user.id
         }
       };
 
-      let userData = user[0] 
+      let userData = user
 
       jwt.sign(
         payload,
@@ -50,6 +57,13 @@ exports.userAuth = async function (req, res) {
           res.json({ token, userData });
         }
       )
+
+
+    } else {
+      errors.password = 'Password Incorrect'
+      return res.status(400).json(errors);
+  }
+})
       
       
     } catch (err) {

@@ -101,6 +101,7 @@ exports.sendResetLink = async function (req, res) {
                 reset_password_token: token, 
                 reset_password_expires: Date.now() + 36000 
             });
+            
             res.sendStatus(200)
 
       } else {

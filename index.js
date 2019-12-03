@@ -42,7 +42,11 @@ app.use('/payment', payment);
 
 
 
-console.log(process.env.SENDGRID_API_KEY)
+const crypto = require('crypto')
+const testToken = crypto.randomBytes(20).toString('hex');
+console.log('testToken', testToken)
+
+
 
 const port = process.env.PORT || 3001;
 

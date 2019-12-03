@@ -7,6 +7,7 @@ const config = require('config');
 
 const EmailUtil = require('../lib/Utils.js');
 const sgMail = require('@sendgrid/mail');
+const crypto = require('crypto')
 
 
 // let email =  "taylor@pasq.net";
@@ -79,18 +80,24 @@ exports.sendResetLink = async function (req, res) {
   let data = req.body;
   let clean_recipient_email = data.username.trim(); 
   console.log('clean_recipient_email', clean_recipient_email)
+  
   try {
       let emailAcctData = await EmailUtil.getEmail(clean_recipient_email);
 
       if (emailAcctData){
          
           let data = JSON.parse(emailAcctData.body)
-          
+          let token = crypto.randomBytes(20).toString('hex'); // get user by token
+
           console.log('data', data)
           // MOVE INTO UTIL FUNCTION TODO:
           //EmailUtil.updateEmailCount(data);
-
-
+          await db('users')
+            .where({ id: data[0].id })
+            .update({
+                reset_password_token: token, 
+                reset_password_expires: Date.now() + 36000 
+            })
 
       } else {
 
@@ -117,13 +124,13 @@ exports.sendResetLink = async function (req, res) {
 
       // using Twilio SendGrid's v3 Node.js Library
       // https://github.com/sendgrid/sendgrid-nodejs
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      sgMail.setApiKey('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');
       const msg = {
-      to: data.username, // TODO does this need to be changed to the fetched data?
-      from: data.from,
-      subject: data.subject,
+      to: 'taylorpasq@gmail.com', // TODO does this need to be changed to the fetched data?
+      from: 'taylorpasq@gmail.com',
+      subject: 'Hello Taylor',
       text: 'PASSWORD REST LINK: www.google.com',
-      html: '<p>'+data.body+'</p>'
+      html: '<p>WHOA</p>'
       };
       sgMail.send(msg);
       return res.sendStatus(200);

@@ -7,7 +7,9 @@ const config = require('config');
 
 const EmailUtil = require('../lib/Utils.js');
 const sgMail = require('@sendgrid/mail');
-const crypto = require('crypto')
+const crypto = require('crypto');
+// const bcrypt = require('bcryptjs');
+
 
 
 // let email =  "taylor@pasq.net";
@@ -85,7 +87,7 @@ exports.sendResetLink = async function (req, res) {
          
           let data = JSON.parse(emailAcctData.body)
           let token = crypto.randomBytes(20).toString('hex'); // get user by token
-
+          console.log('token', token)
 
           sendEmail(data, token);
 
@@ -113,6 +115,8 @@ exports.sendResetLink = async function (req, res) {
 
   function sendEmail(data, token) {
     console.log('data data data', data)
+    console.log('token', token)
+
       //const data = data.body
 
       // let recipient_email_multi = data.recipient_email.split(",");
@@ -131,13 +135,13 @@ exports.sendResetLink = async function (req, res) {
       // sgMail.send(msg);
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const msg = {
-  to: 'taylor@pasq.net',//data[0].email,
-  from:'taylor@pasq.net', //'taylor.pasq@paseonforms.com',
+  to: data[0].email,
+  from:'taylor.pasq@paseonforms.com',
   subject: 'Link to Reset Account Password',
   text: 
   `You are recieving this because you (or someone else) have requested the reset of the password for your account. \n\n`+
   `Please click on the following link, or paste this into your browser to complete the process withing one hour of recieving it:\n\n`+
-  `http://localhost:3000/reset/${token}`+
+  `http://localhost:3000/reset/${token}\n\n`+
   `If you did not request this, please ignore this email and your password will remain unchaged.\n`,
  // html: '<p> </p>',
 };

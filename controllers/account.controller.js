@@ -6,7 +6,28 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 
+//Get account details
+exports.getUserAccountDetails = async function (req, res){
+    console.log('hit account controllor! getUserAccountDetails =================' )
+ 
+    
+    
 
+    try {
+        console.log('TRY')
+        await db('users').select('*').where({            
+            id: req.body.id  //todo this will need to be based on logged in user
+        }).first().then(response => {
+            
+            res.json(response);
+        })
+      } catch (err) {
+        console.log('get error', err)
+      }
+}
+
+
+//Get User by reset token for handling reset
 exports.getUser = async function (req, res){
     console.log('hit account controllor!',req.params.id  )
     

@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "test": "echo \"No tests yet...\"",
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "node index.js" 
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",

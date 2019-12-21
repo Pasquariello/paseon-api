@@ -8,7 +8,7 @@ const crypto = require('crypto')
 exports.getCampaigns = async function (req, res){
     console.log('hit get!')
     console.log('in dets', req.params.id)
-
+   await setTimeout(async function(){console.log('hello') 
 
     try {
         // await db('campaigns').select('id', 'campaign_name', 'date_created', 'count').where({            
@@ -47,6 +47,7 @@ exports.getCampaigns = async function (req, res){
     } catch (err) {
         console.log('get error', err)
     }
+}, 10000);
 }
 
 exports.getStatsAllCampaigns = async function (req, res){

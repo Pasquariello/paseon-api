@@ -1,0 +1,7 @@
+{
+    "rules": [
+      { "pathname": "/api/*", "dest": "nodejs-api.taylorpasq.now.sh/" },
+      { "pathname": "/**", "dest": "paseon.taylorpasq.now.sh/" },
+      { "dest": "www.paseon.taylorpasq.now.sh/" }
+    ]
+  }

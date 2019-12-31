@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 // app.use(cors({credentials: true, origin: 'http://127.0.0.1:8081'}));
 app.use(cors({credentials: true, origin: '*'}));
 // app.use(cors({credentials: true, origin: 'http://localhost:3001/campaign/new_campaign'}));
-//app.use(cors({credentials: true, origin: 'https://paseon.taylorpasq.now.sh'}));
+// app.use(cors({credentials: true, origin: 'https://paseon.taylorpasq.now.sh'}));
 
 
 

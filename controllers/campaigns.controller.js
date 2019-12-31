@@ -8,7 +8,6 @@ const crypto = require('crypto')
 exports.getCampaigns = async function (req, res){
     console.log('hit get!')
     console.log('in dets', req.params.id)
-   await setTimeout(async function(){console.log('hello') 
 
     try {
         // await db('campaigns').select('id', 'campaign_name', 'date_created', 'count').where({            
@@ -25,14 +24,13 @@ exports.getCampaigns = async function (req, res){
             .leftJoin('campaign_responses', 'campaigns.id', '=','campaign_responses.campaign_id')
             .select('campaigns.id', 'campaigns.form_schema', 'campaigns.response_schema', 'campaigns.campaign_name', 'campaigns.date_created', 'campaigns.count')
             .select(db.raw('jsonb_array_length(field_values)'))
-        
             .where({            
                 user_id: req.params.id  //todo this will need to be based on logged in user
              })
             .then(response => {
                 console.log('response', response)
-                
-                res.json(response);
+                res.status(200).json(response)
+                // res.json('get campaigns', response);
             });
 
             // !!!!!!! LENGTH EXAMPLE !!!!!!!
@@ -47,7 +45,7 @@ exports.getCampaigns = async function (req, res){
     } catch (err) {
         console.log('get error', err)
     }
-}, 10000);
+
 }
 
 exports.getStatsAllCampaigns = async function (req, res){
@@ -70,7 +68,6 @@ exports.getStatsAllCampaigns = async function (req, res){
             .join('campaign_responses', 'campaigns.id', '=','campaign_responses.campaign_id')
             .select('campaigns.id', 'campaigns.form_schema', 'campaigns.response_schema', 'campaigns.campaign_name', 'campaigns.date_created', 'campaigns.count')
             .select(db.raw('jsonb_array_length(field_values)'))
-        
             .where({            
                 user_id: req.params.id  //todo this will need to be based on logged in user
              })
@@ -129,28 +126,6 @@ console.log(req.body.fields)
         if (req.body.recipient_email){
             hash = hash.update('taylor@pasq.net').digest("hex");
         }
-
-        // [ 
-        //     { 
-        //        "tag":"input",
-        //        "name":"name",
-        //        "type":"text",
-        //        "label":"Name",
-        //        "value":"",
-        //        "required":false,
-        //        "placholder":""
-        //     },
-        //     { 
-        //        "tag":"input",
-        //        "name":"fav_hobbie",
-        //        "type":"text",
-        //        "label":"Fav Hobbie",
-        //        "value":"",
-        //        "required":false,
-        //        "placholder":""
-        //     }
-        //  ]
-
         
         let response_schema = {}
         req.body.fields.map(field => {
@@ -171,10 +146,28 @@ console.log(req.body.fields)
             form_schema: JSON.stringify(req.body.fields),
             response_schema: JSON.stringify(response_schema)
         })
-        .returning('id')
+        .returning(
+            ['id','challenger', 'challenged'] // TODO
+            
+        )
         .then( response => {
             console.log('response', response)
-            res.sendStatus(200)
+            //res.sendStatus(200)
+           
+            // res.json({
+            //     status: 200,
+            //     data_schema,
+            //     form_data,
+            // });
+            res.status(200).json(response)
+
+    //         id: 178,
+    // form_schema: [ [Object], [Object], [Object], [Object] ],
+    // response_schema: {
+    //   body: [Object],
+    //   name: [Object],
+    //   subject: [Object],
+    //   recipient_email: [Object]
         });
     
     } catch (err) {

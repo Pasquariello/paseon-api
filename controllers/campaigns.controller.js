@@ -146,10 +146,7 @@ console.log(req.body.fields)
             form_schema: JSON.stringify(req.body.fields),
             response_schema: JSON.stringify(response_schema)
         })
-        .returning(
-            ['id','challenger', 'challenged'] // TODO
-            
-        )
+        .returning(['id', 'form_schema', 'response_schema', 'campaign_name','date_created'])
         .then( response => {
             console.log('response', response)
             //res.sendStatus(200)

@@ -120,6 +120,8 @@ exports.campaignDetails = async function (req, res){
 
 exports.newCampaign = async function (req, res) {
 console.log(req.body.fields)
+console.log('IDDDD', req.params.id)
+
     try {
         let hash = crypto.createHash('md5');
 
@@ -142,7 +144,7 @@ console.log(req.body.fields)
    
         await db('campaigns').insert({
             campaign_name: req.body.campaign_name, 
-            user_id: 2,  //todo this will need to be based on logged in user
+            user_id: req.params.id,  //todo this will need to be based on logged in user
             form_schema: JSON.stringify(req.body.fields),
             response_schema: JSON.stringify(response_schema)
         })

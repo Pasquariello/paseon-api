@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const app = express();
-console.log('made it to campaign router')
+console.log('made it to campaign router dude')
 
 const campaigns_controller = require('../../controllers/campaigns.controller.js');
 

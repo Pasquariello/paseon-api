@@ -121,7 +121,7 @@ exports.campaignDetails = async function (req, res){
 exports.newCampaign = async function (req, res) {
 console.log(req.body.fields)
 console.log('IDDDD', req.params.id)
-
+console.log('=============')
     try {
         let hash = crypto.createHash('md5');
 

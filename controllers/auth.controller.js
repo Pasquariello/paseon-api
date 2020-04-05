@@ -7,6 +7,7 @@ const config = require('config');
 
 const EmailUtil = require('../lib/Utils.js');
 const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 
@@ -126,6 +127,7 @@ exports.sendResetLink = async function (req, res) {
 }
 
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   function sendEmail(data, token) {
     console.log('data data data', data)
@@ -147,7 +149,8 @@ exports.sendResetLink = async function (req, res) {
       // html: '<p>WHOA</p>'
       // };
       // sgMail.send(msg);
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+            
+
 const msg = {
   to: data[0].email,
   from:'taylor.pasq@paseonforms.com',

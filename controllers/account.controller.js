@@ -29,7 +29,7 @@ exports.getUserAccountDetails = async function (req, res){
 
 //Get User by reset token for handling reset
 exports.getUser = async function (req, res){
-    console.log('hit account controllor!',req.params.id  )
+    console.log('hit account controllor!',req.params.id);
     
     try {
         await db('users').select('*').where({            
@@ -46,6 +46,32 @@ exports.getUser = async function (req, res){
       }
 }
 
+exports.editUser = async function (req, res) {
+    console.log('hit edit user controller', req.params.id);
+    const { id, first_name, last_name, company, email } = req.body;
+
+    if (!email) {
+        return res.send(400).status({msg: 'Email Requried'});
+    }
+
+    try {
+        let user = await db('users').select('*').first().where({id: id});
+        console.log('USER', user)
+       await db('users')
+            .where({ id: id })
+            .update({ 
+                first_name, 
+                last_name, 
+                company, 
+                email
+            }).then( response => {
+                res.json(response);
+            })
+    } catch(error){
+        console.log('ERROR', error)
+    }
+}
+
 const lessThanOneHourAgo = (date) => {
     const HOUR = 1000 * 60 * 60;
     const anHourAgo = Date.now() - HOUR;
@@ -58,11 +84,6 @@ exports.resetUserPassword = async function (req, res){
     console.log('hit hupdate poassword')
 
     const { id , password1 } = req.body;
-
-
-console.log(req.body)
-
-
 
     try {
 

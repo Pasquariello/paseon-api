@@ -7,7 +7,7 @@ const account_controller = require('../../controllers/account.controller.js');
 
 router.get('/get_user_acct/:id', account_controller.getUser);
 router.post('/get_acct_details', account_controller.getUserAccountDetails);
-
+router.put('/edit_user_acct', account_controller.editUser)
 router.post('/reset_password', account_controller.resetUserPassword);
 
 module.exports = router;

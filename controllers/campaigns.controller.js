@@ -5,7 +5,7 @@ const crypto = require('crypto')
 
 
 
-exports.getCampaigns = async function (req, res){
+exports.getCampaignsORIG = async function (req, res){
     console.log('hit get!')
     console.log('in dets', req.params.id)
 
@@ -47,6 +47,48 @@ exports.getCampaigns = async function (req, res){
     }
 
 }
+
+
+
+////////////
+exports.getCampaigns = async function (req, res){
+    console.log('hit get!')
+    console.log('in detzzzzzzzzzz', req.params.id)
+
+    try {
+        await db('campaigns').select('id', 'campaign_name', 'date_created', 'count').where({            
+           user_id: req.params.id  //todo this will need to be based on logged in user
+        }).then(response => {
+            console.log('resssss', response)
+            res.json(response);
+        })
+
+
+        // MOVE THIS TO A NEW ANALYTICS GET?
+
+        // LENGTH WORKS!!!!
+        // await db('campaigns')
+        //     .leftJoin('campaign_responses', 'campaigns.id', '=','campaign_responses.campaign_id')
+        //     .select('campaigns.id', 'campaigns.form_schema', 'campaigns.response_schema', 'campaigns.campaign_name', 'campaigns.date_created', 'campaigns.count')
+        //     .select(db.raw('jsonb_array_length(field_values)'))
+        //     .where({            
+        //         user_id: req.params.id  //todo this will need to be based on logged in user
+        //      })
+        //     .then(response => {
+        //         console.log('response', response)
+        //         res.status(200).json(response)
+        //         // res.json('get campaigns', response);
+        //     });
+
+         
+
+    
+    } catch (err) {
+        console.log('get error', err)
+    }
+
+}
+///////////////////
 
 exports.getStatsAllCampaigns = async function (req, res){
     console.log('hit get!')
@@ -93,7 +135,7 @@ exports.getStatsAllCampaigns = async function (req, res){
 
 
 
-
+/// is this my issue
 exports.campaignDetails = async function (req, res){
     console.log('in dets', req.params.id)
     
@@ -109,9 +151,22 @@ exports.campaignDetails = async function (req, res){
                         data_schema,
                         form_data,
                     });
-               
+                    console.log('-------------', data_schema)
+                    console.log('-------------', form_data)
                 });
         });
+        // await db('campaigns').select('form_schema', 'response_schema', 'campaign_name', 'date_created').where({
+        //     id: req.params.id
+        // }).then(data_schema => {
+            // await db('campaign_responses').select('*').where({            
+            //        campaign_id: req.params.id
+            //     }).then(form_data => {
+            //         res.json({
+            //             form_data,
+            //         });
+            //         console.log('-------------', form_data)
+            // });
+       
 
     } catch (err) {
         console.log('get error', err)

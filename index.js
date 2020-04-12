@@ -27,6 +27,8 @@ const auth = require('./routes/api/auth.route.js'); // Imports routes for the au
 const campaigns = require('./routes/api/campaigns.route.js'); // Imports routes for the campaigns
 const register = require('./routes/api/register.route.js'); // Imports routes for the register
 const account = require('./routes/api/account.route.js'); // Imports routes for the stripe
+const campaign_response = require('./routes/api/campaign_response.route.js'); // Imports campaign responses for the campaign_responses
+
 
 // Stripe
 const payment = require('./routes/api/payment.route.js'); // Imports routes for the stripe
@@ -44,6 +46,7 @@ app.use('/register', register);
 app.use('/campaign', campaigns);
 app.use('/payment', payment);
 app.use('/account', account);
+app.use('/campaign_response', campaign_response);
 
 
 

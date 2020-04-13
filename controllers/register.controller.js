@@ -18,7 +18,7 @@ exports.register_user = async function (req, res){
         email: req.body.email,
         company: req.body.company, 
         password: req.body.password1,
-        account_type: 'basic'
+        account_type: 'basic' //TODO: dont hardcode
     }
 
     try {

@@ -189,16 +189,30 @@ console.log('=============')
         }
         
         let response_schema = {}
-        req.body.fields.map(field => {
 
-             let key = field.name;
-             let label_string = field.label; 
+        req.body.fields.map(row => {
+            row.map(item => {
+                let key = item.name;
+                let label_string = item.label;
+
+                response_schema[key] = {
+                    label: label_string,
+                    value: ""
+                }
+            })
+        })
+
+        console.log(' =======  RESPONSE SCHEMA ======= ', response_schema)
+        // req.body.fields.map(field => {
+
+        //      let key = field.name;
+        //      let label_string = field.label; 
              
-             response_schema[key] = {
-                label: label_string,
-                value: ""
-             }
-         });
+        //      response_schema[key] = {
+        //         label: label_string,
+        //         value: ""
+        //      }
+        //  });
 
    
         await db('campaigns').insert({

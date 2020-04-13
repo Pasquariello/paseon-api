@@ -138,12 +138,16 @@ exports.getStatsAllCampaigns = async function (req, res){
 /// is this my issue
 exports.campaignDetails = async function (req, res){
     console.log('in dets', req.params.id)
-    
+    console.log('in dets', req.body)
     try {
     // CURRENT WORKING VERSION
         await db('campaigns').select('form_schema', 'response_schema', 'campaign_name', 'date_created').where({
             id: req.params.id
-        }).then(data_schema => {
+        })
+        // .andWhere({
+        //     user_id: req.params.user_id
+        // })
+        .then(data_schema => {
             db('campaign_responses').select('*').where({            
                    campaign_id: req.params.id
                 }).then(form_data => {

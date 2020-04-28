@@ -40,7 +40,7 @@ exports.login = async function (req, res) {
 
 exports.sendEmail = async function (req, res) {
 
-    console.log('ttown', req.body)
+    console.log('====', req.body)
  
     let data = req.body;
     let clean_recipient_email = data.recipient_email.trim()
@@ -54,7 +54,7 @@ exports.sendEmail = async function (req, res) {
             
             console.log('data', data)
             // MOVE INTO UTIL FUNCTION TODO:
-            EmailUtil.updateEmailCount(data);
+            // EmailUtil.updateEmailCount(data);
 
 
  
@@ -72,26 +72,59 @@ exports.sendEmail = async function (req, res) {
     }
 
 
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+  function sendEmail(data) {
+    console.log('data data data', data)
 
-    function sendEmail(data) {
-        //const data = data.body
-        // let recipient_email_multi = data.recipient_email.split(",");
-        // recipient_email_multi.join(',')
+      //const data = data.body
 
-        // using Twilio SendGrid's v3 Node.js Library
-        // https://github.com/sendgrid/sendgrid-nodejs
-        // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-        const msg = {
-        to: data.recipient_email,
+      // let recipient_email_multi = data.recipient_email.split(",");
+      // recipient_email_multi.join(',')
+
+      // using Twilio SendGrid's v3 Node.js Library
+      // https://github.com/sendgrid/sendgrid-nodejs
+      // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      // const msg = {
+      // to: 'taylor.pasq@paseonforms.com', // TODO does this need to be changed to the fetched data?
+      // from: 'taylorpasq@gmail.com',
+      // subject: 'Hello Taylor',
+      // text: 'PASSWORD REST LINK: www.google.com',
+      // html: '<p>WHOA</p>'
+      // };
+      // sgMail.send(msg);
+            
+
+const msg = {
+    to: data.recipient_email,
         from: data.from,
         subject: data.subject,
         text: 'and easy to do anywhere, even with Node.js',
-        html: '<p>'+data.body+'</p>'
-        };
-        sgMail.send(msg);
-        return res.sendStatus(200);
-    }
+};
+  sgMail.send(msg);
+  }
+
+
+
+    // function sendEmail(data) {
+    //     console.log('DATA === DATA ', data)
+    //     //const data = data.body
+    //     // let recipient_email_multi = data.recipient_email.split(",");
+    //     // recipient_email_multi.join(',')
+
+    //     // using Twilio SendGrid's v3 Node.js Library
+    //     // https://github.com/sendgrid/sendgrid-nodejs
+    //     // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    //     const msg = {
+    //     to: data.recipient_email,
+    //     from: data.from,
+    //     subject: data.subject,
+    //     text: 'and easy to do anywhere, even with Node.js',
+    //     html: '<p>'+data.body+'</p>'
+    //     };
+    //     sgMail.send(msg);
+    //     return res.sendStatus(200);
+    // }
 
   
 

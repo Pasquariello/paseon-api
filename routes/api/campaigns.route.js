@@ -5,7 +5,7 @@ console.log('made it to campaign router dude')
 
 const campaigns_controller = require('../../controllers/campaigns.controller.js');
 
-router.post('/campaign/:id', campaigns_controller.newCampaign);
+router.post('/:id', campaigns_controller.newCampaign);
 //router.put('/campaign/:id', campaigns_controller.editCampaign);
 router.get('/get_campaigns/:id', campaigns_controller.getCampaigns);
 router.get('/analytics/:id', campaigns_controller.getStatsAllCampaigns);

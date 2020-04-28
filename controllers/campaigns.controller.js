@@ -178,14 +178,14 @@ exports.campaignDetails = async function (req, res){
 }
 
 exports.newCampaign = async function (req, res) {
-console.log(req.body.fields)
+console.log(req.body)
 console.log('IDDDD', req.params.id)
 console.log('=============')
     try {
         let hash = crypto.createHash('md5');
 
         if (req.body.recipient_email){
-            hash = hash.update('taylor@pasq.net').digest("hex");
+            hash = hash.update(req.body.recipient_email).digest("hex");
         }
         
         let response_schema = {}
@@ -203,22 +203,14 @@ console.log('=============')
         })
 
         console.log(' =======  RESPONSE SCHEMA ======= ', response_schema)
-        // req.body.fields.map(field => {
-
-        //      let key = field.name;
-        //      let label_string = field.label; 
-             
-        //      response_schema[key] = {
-        //         label: label_string,
-        //         value: ""
-        //      }
-        //  });
-
+       
    
         await db('campaigns').insert({
             campaign_name: req.body.campaign_name, 
             user_id: req.params.id,  //todo this will need to be based on logged in user
             form_schema: JSON.stringify(req.body.fields),
+            recipient_email_hashed: hash,
+            recipient_email: req.body.recipient_email,
             response_schema: JSON.stringify(response_schema)
         })
         .returning(['id', 'form_schema', 'response_schema', 'campaign_name','date_created'])
